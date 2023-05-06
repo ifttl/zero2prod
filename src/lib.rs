@@ -29,14 +29,14 @@ async fn greet(req: HttpRequest) -> impl Responder {
 
 `web::get()` is a short-cut for `Route::new().guard(guard::Get())
 */
-pub fn run() -> Result<Server, std::io::Error> {
+pub fn run(address: &str) -> Result<Server, std::io::Error> {
     let server = HttpServer::new(|| {
         App::new()
             .route("/health_check", web::get().to(health_check))
             .route("/", web::get().to(greet))
             .route("/{name}", web::get().to(greet))
     })
-    .bind("127.0.0.1:8000")?
+    .bind(address)?
     .run();
 
     Ok(server)

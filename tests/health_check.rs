@@ -7,6 +7,7 @@ async fn health_check_works() {
 
     let client = reqwest::Client::new();
 
+    // TODO the address is still hardcoded
     let response = client
         .get("http://127.0.0.1:8000/health_check")
         .send()
@@ -18,7 +19,8 @@ async fn health_check_works() {
 }
 
 fn spawn_app() {
-    let server = zero2prod::run().expect("Failed to bind address");
+    // trying to bind port 0 will trigger an OS scan for an available port
+    let server = zero2prod::run("127.0.0.1:0").expect("Failed to bind address");
 
     let _ = tokio::spawn(server);
 }
