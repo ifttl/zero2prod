@@ -1,8 +1,17 @@
-use actix_web::{web, App, HttpRequest, HttpServer, Responder};
+use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer, Responder};
 
 async fn greet(req: HttpRequest) -> impl Responder {
     let name = req.match_info().get("name").unwrap_or("World");
     format!("Hello {}!", &name)
+}
+
+async fn health_check(_req: HttpRequest) -> impl Responder {
+    // use `HttpResponse::Ok` to get a `HttpResponseBuilder`
+    // primed with a 200 OK status code
+    // `HttpResponseBuilder` implements `Responder`
+    // we can therefore omit our call to `finish`
+    // HttpResponse::Ok().finish()
+    HttpResponse::Ok()
 }
 
 /*
@@ -25,6 +34,7 @@ use `cargo expand` to see the expanded code
 async fn main() -> Result<(), std::io::Error> {
     HttpServer::new( || {
         App::new()
+            .route("/health_check", web::get().to(health_check))
             .route("/", web::get().to(greet))
             .route("/{name}", web::get().to(greet))
     })
