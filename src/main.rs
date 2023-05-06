@@ -32,7 +32,7 @@ use `cargo expand` to see the expanded code
 */
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {
-    HttpServer::new( || {
+    HttpServer::new(|| {
         App::new()
             .route("/health_check", web::get().to(health_check))
             .route("/", web::get().to(greet))
