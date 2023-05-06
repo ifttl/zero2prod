@@ -2,6 +2,7 @@
 
 use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer, Responder};
 use actix_web::dev::Server;
+use std::net::TcpListener;
 
 async fn health_check(_req: HttpRequest) -> impl Responder {
     // use `HttpResponse::Ok` to get a `HttpResponseBuilder`
@@ -29,14 +30,14 @@ async fn greet(req: HttpRequest) -> impl Responder {
 
 `web::get()` is a short-cut for `Route::new().guard(guard::Get())
 */
-pub fn run(address: &str) -> Result<Server, std::io::Error> {
+pub fn run(listener: TcpListener) -> Result<Server, std::io::Error> {
     let server = HttpServer::new(|| {
         App::new()
             .route("/health_check", web::get().to(health_check))
             .route("/", web::get().to(greet))
             .route("/{name}", web::get().to(greet))
     })
-    .bind(address)?
+    .listen(listener)?
     .run();
 
     Ok(server)
