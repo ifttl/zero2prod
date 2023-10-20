@@ -1,10 +1,10 @@
 //! main.rs
 
+use env_logger::Env;
 use sqlx::PgPool;
 use std::net::TcpListener;
 use zero2prod::configuration::get_configuration;
 use zero2prod::startup::run;
-use env_logger::Env;
 
 /*
 `main` is the entry point of the program, **cannot** be `async`
